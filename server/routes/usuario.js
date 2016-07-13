@@ -1,3 +1,4 @@
+'use strict';
 module.exports = function(app ){
   var uri = '/rest/usuario';
   var controller = app.controllers.usuario;
