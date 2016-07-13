@@ -1,0 +1,39 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "/",
+  "type": "object",
+  "properties": {
+    "nome": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "senha": {
+      "type": "string"
+    },
+    "telefones": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "numero": {
+            "type": "integer"
+          },
+          "ddd": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "numero",
+          "ddd"
+        ]
+      }
+    }
+  },
+  "required": [
+    "nome",
+    "email",
+    "senha"
+  ]
+}
