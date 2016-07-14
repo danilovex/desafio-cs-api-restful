@@ -1,5 +1,7 @@
 'use strict';
-var Promise = require('bluebird');
+var Promise = require('bluebird'),
+    jwt = require('jsonwebtoken'),
+    crypto = require('crypto');
 
 module.exports = function(app){ // jshint ignore:line
   var service = {};
@@ -22,6 +24,10 @@ function bindUser(data){
        if(data.length > 0){
          resolve('E-mail já existente!');
        }else{
+
+         user.senha = crypto.createHash('sha1').update(user.senha).digest('hex');
+         user.token = jwt.sign({ email: user.email }, app.get('secret'), { expiresIn: 3600 });
+
          dao.save(user).then(function(data){
            console.log(data);
            resolve(bindUser(data));
