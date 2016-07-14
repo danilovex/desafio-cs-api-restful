@@ -3,13 +3,13 @@ var ObjectId = require('mongoose').Types.ObjectId,
     Promise = require('bluebird');
 
 module.exports = function(app){
-  var Usuario = app.models.usuario;
+  var User = app.models.user;
 
   var dao = {};
 
-dao.getUsuario = function(email){
+dao.getUser = function(email){
   return new Promise(function(resolve, reject){
-    Usuario.findOne({ email: email }, function(err, rows) {
+    User.find({ email: email }, function(err, rows) {
       if (err) {
         reject(err);
       } else {
@@ -19,8 +19,9 @@ dao.getUsuario = function(email){
   });
 };
 
-dao.salvar = function(usuario){
-    var model = new Usuario(usuario);
+dao.save = function(user){
+  console.log('tese');
+    var model = new User(user);
     return Promise.promisify(model.save, model)();
   };
 

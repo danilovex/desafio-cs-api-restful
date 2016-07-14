@@ -3,9 +3,9 @@ var Promise = require('bluebird');
 
 module.exports = function(app){ // jshint ignore:line
   var service = {};
-  var dao = app.dao.usuario;
+  var dao = app.dao.user;
 
-function bindUsuario(data){
+function bindUser(data){
   return {
     id: data._id,
     data_criacao: data.data_criacao,
@@ -15,16 +15,18 @@ function bindUsuario(data){
   };
 }
 
- service.salvar = function(usuario){
+ service.save = function(user){
 
    return new Promise(function(resolve, reject){
-     dao.getUsuario(usuario.email).then(function(data){
+     dao.getUser(user.email).then(function(data){
        if(data.length > 0){
          resolve('E-mail já existente!');
        }else{
-         dao.salvar(usuario).then(function(data){
-           resolve(bindUsuario(data));
+         dao.salvar(user).then(function(data){
+           console.log(data);
+           resolve(bindUser(data));
          }).catch(function(err){
+           console.log(err);
            reject(err);
          });
       }

@@ -2,7 +2,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var Usuario = new Schema({
+var User = new Schema({
     id: { type: mongoose.Schema.ObjectId, required: false },
     nome: { type: String, required: true },
     email: { type: String, required: true, index: {unique:true} },
@@ -12,8 +12,8 @@ var Usuario = new Schema({
     data_atualizacao: { type: Date, default: Date.now, required: true },
     ultimo_login: { type: Date, default: Date.now, required: false },
     token:{ type: String, required: false }
-},{collection : 'usuario'});
+},{collection : 'user'});
 
 module.exports = function() {
-  return mongoose.model('usuario', Usuario);
+  return mongoose.model('user', User);
 };
