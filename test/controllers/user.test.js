@@ -10,7 +10,7 @@ const sinon = require('sinon'),
 sinonStubPromise(sinon);
 
 var service = {
-  save: function(err, data) {}
+  signup: function(err, data) {}
 };
 
 var app = {
@@ -19,7 +19,7 @@ var app = {
   }
 };
 
-var stub = sinon.stub(app.services.user, 'save');
+var stub = sinon.stub(app.services.user, 'signup');
 
 var res = {
   status: function(x) {
@@ -63,7 +63,7 @@ describe('Controller Usuário', function() {
         return this;
       }
     };
-controller(app).save(user, res, function(err, data){});
+controller(app).signup(user, res, function(err, data){});
     stub.called.should.be.equal(false);
 });
 
@@ -89,7 +89,7 @@ controller(app).save(user, res, function(err, data){});
       }
     };
 
-controller(app).save(user, res, function(err, data){});
+controller(app).signup(user, res, function(err, data){});
     stub.called.should.be.equal(false);
 });
 
@@ -117,7 +117,7 @@ controller(app).save(user, res, function(err, data){});
       }
     };
 
-    controller(app).save(user, res, function(err, data) {
+    controller(app).signup(user, res, function(err, data) {
       stub.called.should.be.equal(false);
     });
   });
@@ -145,7 +145,7 @@ controller(app).save(user, res, function(err, data){});
           }
         };
 
- controller(app).save(user, res, function(err, data){});
+ controller(app).signup(user, res, function(err, data){});
       stub.called.should.be.equal(false);
 
  });
@@ -176,7 +176,7 @@ controller(app).save(user, res, function(err, data){});
     };
 
 
-    controller(app).save(user, res, function(err, data) {
+    controller(app).signup(user, res, function(err, data) {
         stub.called.should.be.equal(true);
     });
   });
