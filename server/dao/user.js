@@ -20,7 +20,6 @@ dao.getUser = function(email){
 };
 
 dao.save = function(user){
-  console.log('tese');
     var model = new User(user);
     return Promise.promisify(model.save, model)();
   };

@@ -22,7 +22,7 @@ function bindUser(data){
        if(data.length > 0){
          resolve('E-mail já existente!');
        }else{
-         dao.salvar(user).then(function(data){
+         dao.save(user).then(function(data){
            console.log(data);
            resolve(bindUser(data));
          }).catch(function(err){
