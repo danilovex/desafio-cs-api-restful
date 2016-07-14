@@ -1,3 +1,4 @@
+'use strict';
 var ObjectId = require('mongoose').Types.ObjectId,
     Promise = require('bluebird');
 
@@ -6,14 +7,15 @@ module.exports = function(app){
 
   var dao = {};
 
-dao.emailExists = function(email){
-  return Usuario.findOne({ email: email })
-  .then(function(usuario) {
-    if(!usuario){
-      return false;
-    }else{
-      return true;
-    }
+dao.getUsuario = function(email){
+  return new Promise(function(resolve, reject){
+    Usuario.findOne({ email: email }, function(err, rows) {
+      if (err) {
+        reject(err);
+      } else {
+        resolve((rows ? rows : []));
+      }
+    });
   });
 };
 

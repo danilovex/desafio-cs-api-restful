@@ -2,7 +2,7 @@
   "name": "DesafioCSNodeJS",
   "version": "0.0.1",
   "private": true,
-  "description": "Desafio NodeJS da Concrete Solutions",
+  "description": "Desafio NodeJS para Concrete Solutions",
   "scripts": {
     "start": "node app.js",
     "test": "./node_modules/.bin/mocha --recursive --reporter spec"
@@ -17,7 +17,13 @@
   },
   "devDependencies": {
     "gulp": "^3.9.1",
+    "gulp-install": "^0.6.0",
+    "gulp-jshint": "^2.0.1",
+    "gulp-nodemon": "^2.1.0",
+    "gulp-notify": "^2.2.0",
+    "jshint": "^2.9.2",
     "mocha": "^2.4.5",
+    "mockery": "^1.7.0",
     "should": "^8.3.0",
     "sinon": "^1.17.3",
     "supertest": "^1.2.0"

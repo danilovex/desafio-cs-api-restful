@@ -1,15 +1,13 @@
 'use strict';
 
-/**
- * Module dependencies.
- */
+/*jshint esversion: 6 */
 const express = require('express'),
       load = require('express-load'),
       bodyParser = require('body-parser'),
       mongoose = require('mongoose');
 
 // Connect to database
-//mongoose.connect('mongodb://admin:admin2016@ds011790.mlab.com:11790/desafiocsnodejs');
+mongoose.connect('mongodb://admin:admin2016@ds011790.mlab.com:11790/desafiocsnodejs');
 
 
 module.exports = function(){
@@ -21,9 +19,8 @@ module.exports = function(){
   app.use(bodyParser.json());
 
   load('models', {cwd: 'server'})
-    .then('helpers')
     .then('dao')
-    .then('service')
+    .then('services')
     .then('controllers')
     .then('routes')
     .into(app);
