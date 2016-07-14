@@ -1,23 +1,16 @@
 'use strict';
 /*jshint esversion: 6 */
 /*jshint unused: false */
+
+
 const sinon = require('sinon'),
       assert = require('assert'),
       should = require('should'),
-			mockery = require('mockery'),
-      controller = require('../server/controllers/usuario'),
-			service = require('../server/services/usuario');
+      controller = require('../server/controllers/usuario');
 
-
-var app = {
-	services: {
-		service :{
-			usuario: {
-				salvar: sinon.spy()
-			}
-		}
-	}
-};
+var usuario = {salvar:function(err,data){}};
+var services = {usuario: usuario};
+var app = {services:services};
 
 var res = {
 	status: function (x){
@@ -28,21 +21,7 @@ var res = {
 	}
 };
 
-before(function() {
-	var serviceMock = sinon.stub(service, 'salvar', function(){
-		return {
-			success: true,
-			data: {
-					id: '5786cf8373e4513352c1aaa3',
-					data_criacao: '2016-07-13T23:32:19.233Z',
-					data_atualizacao: '2016-07-13T23:32:19.233Z',
-					ultimo_login: '2016-07-13T23:32:19.233Z'
-			}
-		};
-	});
-	mockery.registerMock(service, serviceMock);
-
-});
+var stub = sinon.stub(app.services.usuario, 'salvar');
 
 describe('Controller Usuário', function() {
 		it('Deve retornar false quando não passar nome', function() {
@@ -101,18 +80,6 @@ describe('Controller Usuário', function() {
 
 		it('Deve retornar true quando passar parâmetros obrigatórios', function() {
 
-			var serviceMock = sinon.stub(service.usuario, 'salvar', function(){
-				return {
-			    success: true,
-			    data: {
-			        id: '5786cf8373e4513352c1aaa3',
-			        data_criacao: '2016-07-13T23:32:19.233Z',
-			        data_atualizacao: '2016-07-13T23:32:19.233Z',
-			        ultimo_login: '2016-07-13T23:32:19.233Z'
-			    }
-				};
-			});
-
 			var usuario = {
 				body : {
 					nome: 'João',
@@ -120,6 +87,18 @@ describe('Controller Usuário', function() {
 					senha: 'teste123'
 				}
 			};
+
+			stub.returns( function(usuario){
+				return {
+							 success: true,
+							 data: {
+									 id: '5786cf8373e4513352c1aaa3',
+									 data_criacao: '2016-07-13T23:32:19.233Z',
+									 data_atualizacao: '2016-07-13T23:32:19.233Z',
+									 ultimo_login: '2016-07-13T23:32:19.233Z'
+							 }
+						 };
+				});
 
 		controller(app).salvar(usuario, res, function(err, data){
 			//data.success.should.equal(true);
