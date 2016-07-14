@@ -17,7 +17,23 @@ function bindUser(data){
   };
 }
 
- service.save = function(user){
+
+service.save = function(user) {
+  return dao.getUser(user.email).then(function(data) {
+    if(data.length > 0){
+        return 'E-mail já existente!';
+    }else{
+      user.senha = crypto.createHash('sha1').update(user.senha).digest('hex');
+      user.token = jwt.sign({ email: user.email }, app.get('secret'), { expiresIn: 3600 });
+      dao.save(user).then(function(data){
+        return bindUser(data);
+      });
+    }
+  });
+};
+
+
+ /*service.save = function(user){
 
    return new Promise(function(resolve, reject){
      dao.getUser(user.email).then(function(data){
@@ -42,7 +58,7 @@ function bindUser(data){
 
    });
 
- };
+ };*/
 
   return service;
 };
