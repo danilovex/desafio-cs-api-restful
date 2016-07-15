@@ -30,20 +30,22 @@ var res = {
   }
 };
 
+var userMock = {
+  success: true,
+  data: {
+    id: '5786cf8373e4513352c1aaa3',
+    nome: 'Joao',
+    email: 'joao@gmail.com',
+    telefones: [{ddd: 11, numero: 42513698}],
+    data_criacao: '2016-07-13T23:32:19.233Z',
+    data_atualizacao: '2016-07-13T23:32:19.233Z',
+    ultimo_login: '2016-07-13T23:32:19.233Z',
+    token: 'HUDAHUADH44545JH45JH43534KHK35'
+  }
+};
+
 before(function() {
-  stub.returnsPromise().resolves({
-    success: true,
-    data: {
-      id: '5786cf8373e4513352c1aaa3',
-      nome: 'Joao',
-      email: 'joao@gmail.com',
-      telefones: [{ddd: 11, numero: 42513698}],
-      data_criacao: '2016-07-13T23:32:19.233Z',
-      data_atualizacao: '2016-07-13T23:32:19.233Z',
-      ultimo_login: '2016-07-13T23:32:19.233Z',
-      token: 'HUDAHUADH44545JH45JH43534KHK35'
-    }
-  });
+  stub.returnsPromise().resolves(userMock);
 });
 
 describe('Controller Usuário', function() {
@@ -154,7 +156,7 @@ stub.called.should.be.equal(false);
 
  });
 
-  it('Deve retornar true quando passar parâmetros obrigatórios', function() {
+  it('Deve retornar true quando passar todos parâmetros obrigatórios', function() {
     var user = {
       body: {
         nome: 'João',
@@ -169,15 +171,9 @@ stub.called.should.be.equal(false);
         return this;
       },
       json: function(json){
+        let data = json.data.data;
         assert.equal(true,json.success);
-        assert.ok(hasOwnProperty(json.data.id));
-        assert.ok(hasOwnProperty(json.data.nome));
-        assert.ok(hasOwnProperty(json.data.email));
-        assert.ok(hasOwnProperty(json.data.telefones));
-        assert.ok(hasOwnProperty(json.data.data_criacao));
-        assert.ok(hasOwnProperty(json.data.data_atualizacao));
-        assert.ok(hasOwnProperty(json.data.ultimo_login));
-        assert.ok(hasOwnProperty(json.data.token));
+        assert.equal(userMock.data, data);
         return this;
       }
     };
