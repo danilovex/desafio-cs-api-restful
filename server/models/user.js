@@ -1,13 +1,13 @@
 'use strict';
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+var mongoose = require('mongoose'),
+    Promise = require('bluebird');
 
-var User = new Schema({
+var schema = new mongoose.Schema({
     id: { type: mongoose.Schema.ObjectId, required: false },
     nome: { type: String, required: true },
     email: { type: String, required: true, index: {unique:true} },
     senha: { type: String, required: true },
-    telefones: [{ numero: { type: Number }, ddd: { type: Number } }],
+    telefones: [{ numero: { type: Number }, ddd: { type: Number } }], required: false,
     data_criacao: { type: Date, default: Date.now, required: false },
     data_atualizacao: { type: Date, default: Date.now, required: true },
     ultimo_login: { type: Date, default: Date.now, required: false },
@@ -15,5 +15,8 @@ var User = new Schema({
 },{collection : 'user'});
 
 module.exports = function() {
-  return mongoose.model('user', User);
+  var User = mongoose.model('user', schema);
+  Promise.promisifyAll(User);
+  Promise.promisifyAll(User.prototype);
+  return User;
 };

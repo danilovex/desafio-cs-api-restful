@@ -7,6 +7,7 @@ const express = require('express'),
       mongoose = require('mongoose');
 
 // Connect to database
+mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://admin:admin2016@ds011790.mlab.com:11790/desafiocsnodejs');
 
 
