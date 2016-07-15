@@ -67,7 +67,7 @@ describe('Controller Usuário', function() {
         return this;
       }
     };
-controller(app).signup(user, res, function(err, data){});
+controller(app).signup(user, res);
     stub.called.should.be.equal(false);
 });
 
@@ -93,8 +93,9 @@ controller(app).signup(user, res, function(err, data){});
       }
     };
 
-controller(app).signup(user, res, function(err, data){});
-    stub.called.should.be.equal(false);
+controller(app).signup(user, res);
+stub.called.should.be.equal(false);
+
 });
 
 
@@ -121,9 +122,8 @@ controller(app).signup(user, res, function(err, data){});
       }
     };
 
-    controller(app).signup(user, res, function(err, data) {
-      stub.called.should.be.equal(false);
-    });
+    controller(app).signup(user, res);
+    stub.called.should.be.equal(false);
   });
 
 
@@ -149,7 +149,7 @@ controller(app).signup(user, res, function(err, data){});
           }
         };
 
- controller(app).signup(user, res, function(err, data){});
+ controller(app).signup(user, res);
       stub.called.should.be.equal(false);
 
  });
@@ -177,15 +177,13 @@ controller(app).signup(user, res, function(err, data){});
         assert.ok(hasOwnProperty(json.data.data_criacao));
         assert.ok(hasOwnProperty(json.data.data_atualizacao));
         assert.ok(hasOwnProperty(json.data.ultimo_login));
-        assert.ok(hasOwnProperty(json.data.toke1n));
+        assert.ok(hasOwnProperty(json.data.token));
         return this;
       }
     };
 
-    controller(app).signup(user, res, function(err, data) {
-        assert.equal(data, 123);
-        stub.called.should.be.equal(true);
-    });
+    controller(app).signup(user, res);
+    stub.called.should.be.equal(true);
   });
 
 
