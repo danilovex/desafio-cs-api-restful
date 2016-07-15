@@ -25,15 +25,13 @@ module.exports = function(app){ // jshint ignore:line
    var isValid = validatorSignup(req.body);
    if(isValid) {
         service.save(req.body).then(function(data){
-          console.log('controller>>');
-          console.log(data);
           return res.status(201).json({success: true, data: data});
         }).catch(function(err){
           return res.status(500).json({success: false, mensagem: err});
         });
    }
    else {
-        return invalidSchema(validator.errors, res);
+        return invalidSchema(validatorSignup.errors, res);
    }
  };
 
@@ -47,7 +45,7 @@ module.exports = function(app){ // jshint ignore:line
       return res.status(201).json({success: true, data: 'TESTE'});
     }
     else {
-        return invalidSchema(validator.errors, res);
+        return invalidSchema(validatorSignin.errors, res);
     }
 
   };

@@ -10,7 +10,7 @@ const sinon = require('sinon'),
 sinonStubPromise(sinon);
 
 var service = {
-  signup: function(err, data) {}
+  save: function(err, data) {}
 };
 
 var app = {
@@ -19,7 +19,7 @@ var app = {
   }
 };
 
-var stub = sinon.stub(app.services.user, 'signup');
+var stub = sinon.stub(app.services.user, 'save');
 
 var res = {
   status: function(x) {
@@ -35,9 +35,13 @@ before(function() {
     success: true,
     data: {
       id: '5786cf8373e4513352c1aaa3',
+      nome: 'Joao',
+      email: 'joao@gmail.com',
+      telefones: [{ddd: 11, numero: 42513698}],
       data_criacao: '2016-07-13T23:32:19.233Z',
       data_atualizacao: '2016-07-13T23:32:19.233Z',
-      ultimo_login: '2016-07-13T23:32:19.233Z'
+      ultimo_login: '2016-07-13T23:32:19.233Z',
+      token: 'HUDAHUADH44545JH45JH43534KHK35'
     }
   });
 });
@@ -167,16 +171,19 @@ controller(app).signup(user, res, function(err, data){});
       json: function(json){
         assert.equal(true,json.success);
         assert.ok(hasOwnProperty(json.data.id));
+        assert.ok(hasOwnProperty(json.data.nome));
+        assert.ok(hasOwnProperty(json.data.email));
+        assert.ok(hasOwnProperty(json.data.telefones));
         assert.ok(hasOwnProperty(json.data.data_criacao));
         assert.ok(hasOwnProperty(json.data.data_atualizacao));
         assert.ok(hasOwnProperty(json.data.ultimo_login));
-        //TODO habilitar assert.ok(hasOwnProperty(json.data.token));
+        assert.ok(hasOwnProperty(json.data.toke1n));
         return this;
       }
     };
 
-
     controller(app).signup(user, res, function(err, data) {
+        assert.equal(data, 123);
         stub.called.should.be.equal(true);
     });
   });
