@@ -1,6 +1,4 @@
 'use strict';
-//var ObjectId = require('mongoose').Types.ObjectId,
-//    Promise = require('bluebird');
 
 module.exports = function(app){
   var User = app.models.user;
