@@ -24,8 +24,7 @@ dao.save = function(user){
   };
 
 dao.update = function(user){
-    return User.findOneAndUpdate({ _id: user._id }, user).then(function(row){
-      console.log(row);
+    return User.findOneAndUpdate({ _id: user._id }, user, { new: true }).then(function(row){
       return row;
     }).catch(function (err){
       return err;

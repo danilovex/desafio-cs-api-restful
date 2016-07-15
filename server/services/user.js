@@ -51,11 +51,10 @@ module.exports = function(app) { // jshint ignore:line
     return dao.getUser(user.email).then(function(data) {
       if (data) {
         if(data.senha === cryptoPassword(user.senha)){
-          data.telefones = [{ddd: 11, numero: 12341234}];
           data.token = generateToken(user.email);
-          //data.ultimo_login = data.data_atualizacao = new Date();
-          return dao.update(data).then(function(data){
-            return bindUser(data);
+          data.ultimo_login = new Date();
+          return dao.update(data).then(function(row){
+            return bindUser(row);
           });
         }else{
           return msgUserPassword;

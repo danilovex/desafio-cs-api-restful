@@ -43,9 +43,9 @@ module.exports = function(app){ // jshint ignore:line
     if(isValid) {
       service.login(req.body).then(function(data){
         if (typeof data === 'string') {
-          return res.status(401).json({success: true, data: data});
+          return res.status(401).json({success: false, data: data});
         }else{
-          return res.status(201).json({success: true, data: data});
+          return res.status(200).json({success: true, data: data});
         }
       }).catch(function(err){
         return res.status(500).json({success: false, mensagem: err});
@@ -56,6 +56,10 @@ module.exports = function(app){ // jshint ignore:line
     }
 
   };
+  controller.getUser = function(req, res){
+
+  };
+  
   return controller;
 
 };

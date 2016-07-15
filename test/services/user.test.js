@@ -9,7 +9,6 @@ const sinon = require('sinon'),
 
 sinonStubPromise(sinon);
 
-
 var dao = {
   save: function(err, data) {},
   getUser: function(err, data) {}
@@ -18,15 +17,6 @@ var dao = {
 var app = {
   dao: {
     user: dao
-  }
-};
-
-var res = {
-  status: function(x) {
-    return res;
-  },
-  json: function(x) {
-    return res;
   }
 };
 
