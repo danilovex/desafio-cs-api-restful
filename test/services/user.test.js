@@ -4,11 +4,14 @@
 const sinon = require('sinon'),
     assert = require('assert'),
     should = require('should'),
-    Promise = require('bluebird'),
+//    Promise = require('bluebird'),
+    chai = require("chai"),
+    chaiAsPromised = require("chai-as-promised"),
     service = require('../../server/services/user'),
     sinonStubPromise = require('sinon-stub-promise');
 
 sinonStubPromise(sinon);
+chai.use(chaiAsPromised);
 
 var dao = {
     save: function(err, data) {},
@@ -65,11 +68,9 @@ describe('Service Usuário', function() {
 
             service(app).save(user).then(function(data) {
                 assert.equal(data, 'E-mail já existente!1');
+                stubGetUser.called.should.be.equal(true);
+                stubSave.called.should.be.equal(false);
             });
-            //expect(service.data).toBe('E-mail já existente!');
-            stubGetUser.called.should.be.equal(true);
-            stubSave.called.should.be.equal(false);
-
         });
 
         before(function() {

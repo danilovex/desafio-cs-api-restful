@@ -31,7 +31,9 @@ module.exports = function(app) { // jshint ignore:line
   }
 
   service.save = function(user) {
+    console.log('chego na funcao');
     return dao.getUser(user.email).then(function(data) {
+      console.log('callback getuser');
       if (data) {
         return 'E-mail já existente!';
       } else {
