@@ -5,7 +5,7 @@ A aplicação foi desenvolvida para um desafio técnico.
 
 Os principais requisitos que a aplicação atendeu foram:
 
-*	Persitência de dados
+*	Persitência de dados no banco Mongo
 *	Sistema de build com gestão de dependências via gerenciador de pacotes NPM
 * Utilização do task runner do Gulp para realização de build
 *	Padronização de estilo de código em tempo de build jsHint
