@@ -394,6 +394,47 @@ describe('Controller Usuário', function() {
         });
 
     });
+    describe('#GetUser', function() {
+        it('Deve retornar status 401 e mensagem de não autorizado quando não passar o token', function() {
+            var req = {
+                headers: {}
+            };
+            res = {
+                status: function(status) {
+                    assert.equal(401, status);
+                    return this;
+                },
+                json: function(json) {
+                    assert.equal('Não autorizado', json);
 
+                    return this;
+                }
+            };
+            controller(app).getUser(req, res);
+            //stubLoginJson.called.should.be.equal(true);
+        });
+        it('Deve retornar status 401 e mensagem de não autorizado quando não passar o id', function() {
+            var req = {
+                headers: {
+                    bearer: 'PDIDIN44493873ddddasDASD'
+                },
+                params : {}
+            };
+            res = {
+                status: function(status) {
+                    assert.equal(401, status);
+                    return this;
+                },
+                json: function(json) {
+                    assert.equal('Não autorizado', json);
+
+                    return this;
+                }
+            };
+            controller(app).getUser(req, res);
+            //stubLoginJson.called.should.be.equal(true);
+        });
+
+    });
 
 });

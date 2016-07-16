@@ -8,12 +8,21 @@ module.exports = function(app){ // jshint ignore:line
   var controller = {};
   var service = app.services.user;
 
-  function invalidSchema(errors, res){
+  function _invalidSchema(errors, res){
     return res.status(404).json({
       mensagem:'Campos obrigatórios não informados!',
       success: false,
       data: errors
     });
+  }
+  function _error(res, err){
+    return res.status(500).json({success: false, mensagem: err});
+  }
+  function _notAuthorized(res, msg){
+    return res.status(401).json(msg || 'Não autorizado');
+  }
+  function _ok(res, data){
+    return res.status(200).json({success: true, data: data});
   }
 
   controller.notFound = function(req, res){
@@ -30,11 +39,11 @@ module.exports = function(app){ // jshint ignore:line
             return res.status(201).json({success: true, data: data});
           }
         }).catch(function(err){
-          return res.status(500).json({success: false, mensagem: err});
+          return _error(res, err);
         });
    }
    else {
-        return invalidSchema(validatorSignup.errors, res);
+        return _invalidSchema(validatorSignup.errors, res);
    }
  };
 
@@ -45,21 +54,31 @@ module.exports = function(app){ // jshint ignore:line
         if (typeof data === 'string') {
           return res.status(401).json({success: false, data: data});
         }else{
-          return res.status(200).json({success: true, data: data});
+          return _ok(res, data);
         }
       }).catch(function(err){
-        return res.status(500).json({success: false, mensagem: err});
+        return _error(res, err);
       });
     }
     else {
-        return invalidSchema(validatorSignin.errors, res);
+        return _invalidSchema(validatorSignin.errors, res);
     }
 
   };
   controller.getUser = function(req, res){
-
+    var token = req.headers.bearer;
+    //TODO Caso o token não exista, retornar erro com status apropriado com a mensagem "Não autorizado".
+    if(!token || !req.params.hasOwnProperty('id')){
+      return _notAuthorized(res);
+    }else{
+        service.getUser().then(function(data){
+          return (typeof data === 'string') ? _notAuthorized(res, data) : _ok(res, data);
+        }).catch(function(err){
+          return _error(res, err);
+        });
+    }
   };
-  
+
   return controller;
 
 };

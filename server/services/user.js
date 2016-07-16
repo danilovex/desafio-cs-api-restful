@@ -7,7 +7,7 @@ module.exports = function(app) { // jshint ignore:line
   var service = {};
   var dao = app.dao.user;
 
-  function bindUser(data) {
+  function _bindUser(data) {
     return {
       id: data._id,
       nome: data.nome,
@@ -19,10 +19,10 @@ module.exports = function(app) { // jshint ignore:line
       token: data.token
     };
   }
-  function cryptoPassword(data){
+  function _crypto(data){
     return crypto.createHash('sha1').update(data).digest('hex');
   }
-  function generateToken(data){
+  function _token(data){
     return jwt.sign({
       email: data
     }, app.get('secret'), {
@@ -31,16 +31,14 @@ module.exports = function(app) { // jshint ignore:line
   }
 
   service.save = function(user) {
-    console.log('chego na funcao');
-    return dao.getUser(user.email).then(function(data) {
-      console.log('callback getuser');
+    return dao.getUser({email: user.email}).then(function(data) {
       if (data) {
         return 'E-mail já existente!';
       } else {
-        user.senha = cryptoPassword(user.senha);
-        user.token = generateToken(user.email);
+        user.senha = _crypto(user.senha);
+        user.token = _token(user.email);
         return dao.save(user).then(function(data) {
-          return bindUser(data);
+          return _bindUser(data);
         });
       }
     });
@@ -50,19 +48,29 @@ module.exports = function(app) { // jshint ignore:line
   //TODO Caso o e-mail exista e a senha seja a mesma que a senha persistida, retornar igual ao endpoint de sign_up.
   service.login = function(user) {
     var msgUserPassword = 'Usuário e/ou senha inválidos';
-    return dao.getUser(user.email).then(function(data) {
+    return dao.getUser({email: user.email}).then(function(data) {
       if (data) {
-        if(data.senha === cryptoPassword(user.senha)){
-          data.token = generateToken(user.email);
+        if(data.senha === _crypto(user.senha)){
+          data.token = _token(user.email);
           data.ultimo_login = new Date();
           return dao.update(data).then(function(row){
-            return bindUser(row);
+            return _bindUser(row);
           });
         }else{
           return msgUserPassword;
         }
       }else{
         return msgUserPassword;
+      }
+    });
+  };
+
+  service.getUser = function(token, id){
+    return dao.getUser({_id: id, token: token}).then(function(data){
+      if(data){
+        return (((Math.abs(new Date()- data.ultimo_login) / 36e5)*60)>30) ? 'Sessão inválida' : _bindUser(data);
+      }else{
+        return 'Não autorizado';
       }
     });
   };

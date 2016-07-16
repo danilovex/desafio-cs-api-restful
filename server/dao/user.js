@@ -5,8 +5,8 @@ module.exports = function(app){
 
   var dao = {};
 
-  dao.getUser = function(email){
-      return User.findOne({ email: email }).then(function(row){
+  dao.getUser = function(where){
+      return User.findOne(where).then(function(row){
         return row ? row : null;
       }).catch(function (err){
           return err;
