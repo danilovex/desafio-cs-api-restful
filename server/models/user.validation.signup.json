@@ -1,6 +1,5 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "id": "/",
   "type": "object",
   "properties": {
     "nome": {
@@ -14,26 +13,13 @@
     },
     "telefones": {
       "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "numero": {
-            "type": "integer"
-          },
-          "ddd": {
-            "type": "integer"
-          }
-        },
-        "required": [
-          "numero",
-          "ddd"
-        ]
-      }
+      "items": {}
     }
   },
   "required": [
     "nome",
     "email",
-    "senha"
+    "senha",
+    "telefones"
   ]
 }

@@ -11,18 +11,17 @@ module.exports = function(app){ // jshint ignore:line
   function _invalidSchema(errors, res){
     return res.status(404).json({
       mensagem:'Campos obrigatórios não informados!',
-      success: false,
       data: errors
     });
   }
   function _error(res, err){
-    return res.status(500).json({success: false, mensagem: err});
+    return res.status(500).json({mensagem: err});
   }
   function _notAuthorized(res, msg){
-    return res.status(401).json(msg || 'Não autorizado');
+    return res.status(401).json({mensagem: msg || 'Não autorizado'});
   }
   function _ok(res, data){
-    return res.status(200).json({success: true, data: data});
+    return res.status(200).json(data);
   }
 
   controller.notFound = function(req, res){
@@ -34,9 +33,9 @@ module.exports = function(app){ // jshint ignore:line
    if(isValid) {
         service.save(req.body).then(function(data){
           if (typeof data === 'string') {
-            return res.status(406).json({success: true, data: data});
+            return res.status(406).json({mensagem: data});
           }else{
-            return res.status(201).json({success: true, data: data});
+            return res.status(201).json(data);
           }
         }).catch(function(err){
           return _error(res, err);
@@ -52,7 +51,7 @@ module.exports = function(app){ // jshint ignore:line
     if(isValid) {
       service.login(req.body).then(function(data){
         if (typeof data === 'string') {
-          return res.status(401).json({success: false, data: data});
+          return _notAuthorized(res, data);
         }else{
           return _ok(res, data);
         }
@@ -67,11 +66,10 @@ module.exports = function(app){ // jshint ignore:line
   };
   controller.getUser = function(req, res){
     var token = req.headers.bearer;
-    //TODO Caso o token não exista, retornar erro com status apropriado com a mensagem "Não autorizado".
     if(!token || !req.params.hasOwnProperty('id')){
       return _notAuthorized(res);
     }else{
-        service.getUser().then(function(data){
+        service.getUser(token, req.params.id).then(function(data){
           return (typeof data === 'string') ? _notAuthorized(res, data) : _ok(res, data);
         }).catch(function(err){
           return _error(res, err);

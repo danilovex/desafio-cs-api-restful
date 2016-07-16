@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>teste</title>
+    <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+  </head>
+  <body>
+<button onclick="DANILO();">ENVAR</button>
+<script>
+
+function DANILO(){
+  param = {
+    "nome": "Danilo",
+    "email": "danilo@gmail.com",
+    "senha": "123456",
+    "telefones": [
+      {
+        "ddd":11,
+        "numero": 12341234
+      }
+    ]
+  };
+
+  $.ajax({
+    type: "POST",
+    url: "http://localhost:3000/rest/usuario/signup",
+    data: param,
+    success: function(res){
+      console.log(res);
+    }
+  });
+};
+
+</script>
+
+  </body>
+</html>

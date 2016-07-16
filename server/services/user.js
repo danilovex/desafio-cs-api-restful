@@ -1,7 +1,6 @@
 'use strict';
-var Promise = require('bluebird'),
-  jwt = require('jsonwebtoken'),
-  crypto = require('crypto');
+var jwt = require('jsonwebtoken'),
+    crypto = require('crypto');
 
 module.exports = function(app) { // jshint ignore:line
   var service = {};
@@ -25,7 +24,7 @@ module.exports = function(app) { // jshint ignore:line
   function _token(data){
     return jwt.sign({
       email: data
-    }, app.get('secret'), {
+    }, 'DesafioConcreteSolutions', {
       expiresIn: 1800
     });
   }
@@ -43,9 +42,7 @@ module.exports = function(app) { // jshint ignore:line
       }
     });
   };
-  //TODO Caso o e-mail não exista, retornar erro com status apropriado mais a mensagem "Usuário e/ou senha inválidos"
-  //TODO Caso o e-mail exista mas a senha não bata, retornar o status apropriado 401 mais a mensagem "Usuário e/ou senha inválidos"
-  //TODO Caso o e-mail exista e a senha seja a mesma que a senha persistida, retornar igual ao endpoint de sign_up.
+
   service.login = function(user) {
     var msgUserPassword = 'Usuário e/ou senha inválidos';
     return dao.getUser({email: user.email}).then(function(data) {

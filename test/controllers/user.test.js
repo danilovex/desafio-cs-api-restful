@@ -11,15 +11,14 @@ sinonStubPromise(sinon);
 
 var service = {
     save: function(err, data) {},
-    login: function(err, data) {}
+    login: function(err, data) {},
+    getUser: function(err, data) {}
 };
-
 var app = {
     services: {
         user: service
     }
 };
-
 var res = {
     status: function(x) {
         return res;
@@ -33,7 +32,6 @@ var res = {
 describe('Controller Usuário', function() {
 
     var userMock = {
-        success: true,
         data: {
             id: '5786cf8373e4513352c1aaa3',
             nome: 'Joao',
@@ -51,15 +49,12 @@ describe('Controller Usuário', function() {
 
     describe('#Signup', function() {
 
-
         var stubSave = sinon.stub(app.services.user, 'save');
-
         before(function() {
             stubSave.returnsPromise().resolves(userMock);
         });
 
-        it('Deve retornar false quando não passar nome', function() {
-
+        it('Deve retornar 404 quando não passar nome', function() {
             var user = {
                 body: {
                     email: 'teste@teste.com',
@@ -72,7 +67,6 @@ describe('Controller Usuário', function() {
                     return this;
                 },
                 json: function(json) {
-                    assert.equal(false, json.success);
                     assert.equal('data.nome', json.data[0].field);
                     assert.equal('is required', json.data[0].message);
                     return this;
@@ -82,72 +76,60 @@ describe('Controller Usuário', function() {
             stubSave.called.should.be.equal(false);
         });
 
-        it('Deve retornar false quando não passar email', function() {
-
+        it('Deve retornar 404 quando não passar email', function() {
             var user = {
                 body: {
                     nome: 'João',
                     senha: 'teste123'
                 }
             };
-
             res = {
                 status: function(status) {
                     assert.equal(404, status);
                     return this;
                 },
                 json: function(json) {
-                    assert.equal(false, json.success);
                     assert.equal('data.email', json.data[0].field);
                     assert.equal('is required', json.data[0].message);
                     return this;
                 }
             };
-
             controller(app).signup(user, res);
             stubSave.called.should.be.equal(false);
-
         });
 
-        it('Deve retornar false quando não passar senha', function() {
-
+        it('Deve retornar 404 quando não passar senha', function() {
             var user = {
                 body: {
                     email: 'teste@teste.com',
                     nome: 'João'
                 }
             };
-
             res = {
                 status: function(status) {
                     assert.equal(404, status);
                     return this;
                 },
                 json: function(json) {
-                    assert.equal(false, json.success);
                     assert.equal('data.senha', json.data[0].field);
                     assert.equal('is required', json.data[0].message);
                     return this;
                 }
             };
-
             controller(app).signup(user, res);
             stubSave.called.should.be.equal(false);
         });
 
-
-        it('Deve retornar false quando não passar parâmetros obrigatórios', function() {
+        it('Deve retornar 404 quando não passar nome, email e senha', function() {
             var user = {
                 body: {}
             };
-
             res = {
                 status: function(status) {
                     assert.equal(404, status);
                     return this;
                 },
                 json: function(json) {
-                    assert.equal(false, json.success);
                     assert.equal('data.nome', json.data[0].field);
                     assert.equal('is required', json.data[0].message);
                     assert.equal('data.email', json.data[1].field);
@@ -157,13 +139,11 @@ describe('Controller Usuário', function() {
                     return this;
                 }
             };
-
             controller(app).signup(user, res);
             stubSave.called.should.be.equal(false);
-
         });
 
-        it('Deve retornar true quando passar todos parâmetros obrigatórios', function() {
+        it('Deve retornar 201 quando passar todos parâmetros obrigatórios', function() {
             var user = {
                 body: {
                     nome: 'João',
@@ -171,29 +151,24 @@ describe('Controller Usuário', function() {
                     senha: 'teste123'
                 }
             };
-
             res = {
                 status: function(status) {
                     assert.equal(201, status);
                     return this;
                 },
                 json: function(json) {
-                    let data = json.data.data;
-                    assert.equal(true, json.success);
+                    let data = json.data;
                     assert.equal(userMock.data, data);
                     return this;
                 }
             };
-
             controller(app).signup(user, res);
             stubSave.called.should.be.equal(true);
         });
-
     });
 
     describe('#NotFound', function() {
-        it('Deve retornar mensagem que api foi não encontrada', function() {
-
+        it('Deve retornar 404 e mensagem que api foi não encontrada', function() {
             res = {
                 status: function(status) {
                     assert.equal(404, status);
@@ -205,77 +180,64 @@ describe('Controller Usuário', function() {
                 }
             };
             controller(app).notFound(null, res);
-
         });
     });
 
     describe('#Signin', function() {
 
         var stubLogin = sinon.stub(app.services.user, 'login');
-
-        it('Deve retornar false quando não passar senha', function() {
-
+        it('Deve retornar 404 quando não passar senha', function() {
             var user = {
                 body: {
                     email: 'teste@teste.com'
                 }
             };
-
             res = {
                 status: function(status) {
                     assert.equal(404, status);
                     return this;
                 },
                 json: function(json) {
-                    assert.equal(false, json.success);
                     assert.equal('data.senha', json.data[0].field);
                     assert.equal('is required', json.data[0].message);
                     return this;
                 }
             };
-
             controller(app).signin(user, res);
             stubLogin.called.should.be.equal(false);
         });
 
-        it('Deve retornar false quando não passar email', function() {
-
+        it('Deve retornar  404 quando não passar email', function() {
             var user = {
                 body: {
-                    senha: '123mudar'
+                    senha: '123teste'
                 }
             };
-
             res = {
                 status: function(status) {
                     assert.equal(404, status);
                     return this;
                 },
                 json: function(json) {
-                    assert.equal(false, json.success);
                     assert.equal('data.email', json.data[0].field);
                     assert.equal('is required', json.data[0].message);
                     return this;
                 }
             };
-
             controller(app).signin(user, res);
             stubLogin.called.should.be.equal(false);
         });
 
-        it('Deve retornar false quando não passar email e senha', function() {
-
+        it('Deve retornar  404 quando não passar email e senha', function() {
             var user = {
                 body: {}
             };
-
             res = {
                 status: function(status) {
                     assert.equal(404, status);
                     return this;
                 },
                 json: function(json) {
-                    assert.equal(false, json.success);
                     assert.equal('data.email', json.data[0].field);
                     assert.equal('is required', json.data[0].message);
                     assert.equal('data.senha', json.data[1].field);
@@ -289,35 +251,29 @@ describe('Controller Usuário', function() {
         });
 
         before(function() {
-            stubLogin.returnsPromise().resolves('Mensagem do tipo string');
+            stubLogin.returnsPromise().resolves('Não autorizado');
         });
 
-        it('Deve retornar false quando receber uma string de retorno do service', function() {
-
+        it('Deve retornar  401 quando usuário não for autorizado', function() {
             var user = {
                 body: {
                     email: 'joao@gmail.com',
                     senha: '123mudar'
                 }
             };
-
             res = {
                 status: function(status) {
                     assert.equal(401, status);
                     return this;
                 },
                 json: function(json) {
-                    assert.equal(false, json.success);
-                    assert.equal(true , (typeof json.data === 'string'));
-
+                    assert.equal('Não autorizado' , json.mensagem);
                     return this;
                 }
             };
-
             controller(app).signin(user, res);
             stubLogin.called.should.be.equal(true);
         });
-
 
         //Criação do objeto service de Mock
         var serviceMock_2 = {
@@ -330,45 +286,38 @@ describe('Controller Usuário', function() {
                 user: serviceMock_2
             }
         };
-        var stubLoginJson = sinon.stub(appMock_2.services.user, 'login');
+        //stub simulando quando usuário conseguiu se autênticar
+        var stubLogin_Ok = sinon.stub(appMock_2.services.user, 'login');
 
         before(function() {
-
-            stubLoginJson.returnsPromise().resolves({nome: 'João'});
+            stubLogin_Ok.returnsPromise().resolves({nome: 'João'});
         });
 
-        it('Deve retornar true quando receber um json de retorno do service', function() {
-
+        it('Deve retornar 200 quando conseguir realizar o login', function() {
             var user = {
                 body: {
                     email: 'joao@gmail.com',
                     senha: '123mudar'
                 }
             };
-
             res = {
                 status: function(status) {
                     assert.equal(200, status);
                     return this;
                 },
                 json: function(json) {
-                    assert.equal(true, json.success);
                     assert.equal(true , (typeof json.data !== 'string'));
-
                     return this;
                 }
             };
-
             controller(appMock_2).signin(user, res);
-            stubLoginJson.called.should.be.equal(true);
+            stubLogin_Ok.called.should.be.equal(true);
         });
 
         before(function() {
-
-            stubLoginJson.returnsPromise().rejects(new Error('Exception'));
+            stubLogin_Ok.returnsPromise().rejects(new Error('Exception'));
         });
-
-        it('Deve retornar status code 500 e success false quando receber uma excessão do service', function() {
+        it('Deve retornar 500 quando acontecer alguma exception', function() {
 
             var user = {
                 body: {
@@ -383,18 +332,18 @@ describe('Controller Usuário', function() {
                     return this;
                 },
                 json: function(json) {
-                    assert.equal(false, json.success);
-
                     return this;
                 }
             };
-
             controller(appMock_2).signin(user, res);
-            stubLoginJson.called.should.be.equal(true);
+            stubLogin_Ok.called.should.be.equal(true);
         });
 
     });
     describe('#GetUser', function() {
+
+        var stubGetUser = sinon.stub(app.services.user, 'getUser');
+
         it('Deve retornar status 401 e mensagem de não autorizado quando não passar o token', function() {
             var req = {
                 headers: {}
@@ -405,13 +354,12 @@ describe('Controller Usuário', function() {
                     return this;
                 },
                 json: function(json) {
-                    assert.equal('Não autorizado', json);
-
+                    assert.equal('Não autorizado', json.mensagem);
                     return this;
                 }
             };
             controller(app).getUser(req, res);
-            //stubLoginJson.called.should.be.equal(true);
+            stubGetUser.called.should.be.equal(false);
         });
         it('Deve retornar status 401 e mensagem de não autorizado quando não passar o id', function() {
             var req = {
@@ -426,13 +374,64 @@ describe('Controller Usuário', function() {
                     return this;
                 },
                 json: function(json) {
-                    assert.equal('Não autorizado', json);
-
+                    assert.equal('Não autorizado', json.mensagem);
                     return this;
                 }
             };
             controller(app).getUser(req, res);
-            //stubLoginJson.called.should.be.equal(true);
+            stubGetUser.called.should.be.equal(false);
+        });
+
+        before(function() {
+            stubGetUser.returnsPromise().resolves(userMock);
+        });
+        it('Deve retornar status 200 quando conseguir recuperar os dados do usuário', function() {
+            var req = {
+                headers: {
+                    bearer: 'PDIDIN44493873ddddasDASD'
+                },
+                params : {
+                    id: '123456789'
+                }
+            };
+            res = {
+                status: function(status) {
+                    assert.equal(200, status);
+                    return this;
+                },
+                json: function(json) {
+                    assert.equal(true , (typeof json.data !== 'string'));
+                    return this;
+                }
+            };
+            controller(app).getUser(req, res);
+            stubGetUser.called.should.be.equal(true);
+        });
+
+        before(function() {
+            stubGetUser.returnsPromise().rejects(new Error('Exception'));
+        });
+        it('Deve retornar 500 quando acontecer alguma exception', function() {
+
+            var req = {
+                headers: {
+                    bearer: 'PDIDIN44493873ddddasDASD'
+                },
+                params : {
+                    id: '123456789'
+                }
+            };
+            res = {
+                status: function(status) {
+                    assert.equal(500, status);
+                    return this;
+                },
+                json: function(json) {
+                    return this;
+                }
+            };
+            controller(app).getUser(req, res);
+            stubGetUser.called.should.be.equal(true);
         });
 
     });

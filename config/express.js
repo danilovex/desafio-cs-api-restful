@@ -15,7 +15,6 @@ module.exports = function(){
   var app = express();
     // all environments
   app.set('port', process.env.PORT || 3000);
-  app.set('secret', 'DesafioConcreteSolutions');
 
   app.use(bodyParser.urlencoded({extended: true}));
   app.use(bodyParser.json());
